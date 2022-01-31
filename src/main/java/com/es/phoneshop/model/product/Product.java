@@ -1,7 +1,10 @@
 package com.es.phoneshop.model.product;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.Date;
+import java.util.List;
 
 public class Product {
     private Long id;
@@ -13,7 +16,8 @@ public class Product {
     private Currency currency;
     private int stock;
     private String imageUrl;
-
+    private Long queryCoincidence=1L;
+    private List<PriceRecord> priceHistory;
     public Product() {
     }
 
@@ -35,10 +39,17 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Long getQueryCoincidence(String[] queries){
+        for (String query: queries){
+            if(description.contains(query)){
+                queryCoincidence++;
+            }
+        }
+        return queryCoincidence;
+    }
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -61,6 +72,18 @@ public class Product {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public void setQueryCoincidence(Long queryCoincidence) {
+        this.queryCoincidence = queryCoincidence;
+    }
+
+    public List<PriceRecord> getPriceHistory() {
+        return priceHistory;
+    }
+
+    public void setPriceHistory(List<PriceRecord> priceHistory) {
+        this.priceHistory = priceHistory;
     }
 
     public void setPrice(BigDecimal price) {

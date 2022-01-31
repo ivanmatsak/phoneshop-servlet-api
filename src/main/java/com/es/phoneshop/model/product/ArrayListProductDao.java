@@ -48,22 +48,24 @@ public class ArrayListProductDao implements ProductDao {
     public List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         lock.readLock().lock();
         try {
-            Comparator<Product> comparator=Comparator.comparing(product -> {
+            Comparator<Product> orderPriceComparator=Comparator.comparing( (Product product) -> {
                 if (sortField!=null && SortField.description == sortField) {
                     return (Comparable) product.getDescription();
                 } else {
                     return (Comparable) product.getPrice();
                 }
             });
-            /*if(sortOrder==SortOrder.desc){
-                comparator=comparator.thenComparing(Comparator.reverseOrder());
-            }*/
+            if(sortOrder==SortOrder.desc){
+                orderPriceComparator=orderPriceComparator.reversed();
+            }
+
             return products.stream()
-                    .filter(product -> query==null || query.isEmpty() || product.getDescription().contains(query))
+                    .filter(product -> query==null || query.isEmpty()
+                            || product.getDescription().contains(query.split(" ")[0]))
                     .filter(product -> product.getPrice()!=null)
                     .filter(product -> product.getStock()>0)
-                    .sorted(comparator
-                    )
+                    .sorted(Comparator.comparing(product -> product.getQueryCoincidence(query.split(""))))
+                    .sorted(orderPriceComparator)
                     .collect(Collectors.toList());
         } finally {
             lock.readLock().unlock();
