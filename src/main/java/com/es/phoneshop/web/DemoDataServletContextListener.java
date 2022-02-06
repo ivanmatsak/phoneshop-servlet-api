@@ -2,12 +2,14 @@ package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.exceptions.ProductNotFoundException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
+import com.es.phoneshop.model.product.PriceRecord;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
@@ -24,6 +26,10 @@ public class DemoDataServletContextListener implements ServletContextListener {
         if(insertDemoData){
             for(Product product: getSampleProducts()){
                 try {
+                    List<PriceRecord> records=new ArrayList<>();
+                    records.add(new PriceRecord(product.getPrice(),product.getCurrency()
+                            , new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")));
+                    product.setPriceHistory(records);
                     productDao.save(product);
                 } catch (ProductNotFoundException e) {
                     throw new RuntimeException("Failed to insert demo data",e);

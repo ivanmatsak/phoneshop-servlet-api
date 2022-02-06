@@ -1,7 +1,10 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.cart.CartItem;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +20,7 @@ public class Product {
     private int stock;
     private String imageUrl;
     private Long queryCoincidence=1L;
-    private List<PriceRecord> priceHistory;
+    private List<PriceRecord> priceHistory=new ArrayList<>();
     public Product() {
     }
 
@@ -46,6 +49,11 @@ public class Product {
             }
         }
         return queryCoincidence;
+    }
+    public void setPriceHistory(List<PriceRecord> priceRecords){
+        for(PriceRecord record:priceRecords){
+            this.priceHistory.add(record);
+        }
     }
     public Long getId() {
         return id;
@@ -82,10 +90,6 @@ public class Product {
         return priceHistory;
     }
 
-    public void setPriceHistory(List<PriceRecord> priceHistory) {
-        this.priceHistory = priceHistory;
-    }
-
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
@@ -112,5 +116,23 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Product)) {
+            return false;
+        }
+
+        Product c = (Product) o;
+        return Long.compare(id,c.id) == 0
+                && code.equals(c.code)
+                && description.equals(c.description)
+                && price.equals(c.price)
+                && currency.equals(c.currency)
+                && Integer.compare(stock,c.stock)==0
+                && imageUrl.equals(c.imageUrl);
     }
 }

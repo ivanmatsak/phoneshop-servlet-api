@@ -64,7 +64,13 @@ public class ArrayListProductDao implements ProductDao {
                             || product.getDescription().contains(query.split(" ")[0]))
                     .filter(product -> product.getPrice()!=null)
                     .filter(product -> product.getStock()>0)
-                    .sorted(Comparator.comparing(product -> product.getQueryCoincidence(query.split(""))))
+                    .sorted(Comparator.comparing(product -> {
+                        if(query==null){
+                            return product.getId();
+                        }else{
+                            return product.getQueryCoincidence(query.split(""));
+                        }
+                    }))
                     .sorted(orderPriceComparator)
                     .collect(Collectors.toList());
         } finally {
@@ -97,13 +103,10 @@ public class ArrayListProductDao implements ProductDao {
     @Override
     public void delete(Long id) throws ProductNotFoundException {
         lock.writeLock().lock();
-
         try {
             products.remove(getProduct(id));
         } finally {
             lock.writeLock().unlock();
         }
     }
-
-
 }
