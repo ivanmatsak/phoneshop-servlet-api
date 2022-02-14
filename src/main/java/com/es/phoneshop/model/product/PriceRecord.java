@@ -1,20 +1,21 @@
 package com.es.phoneshop.model.product;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Currency;
 import java.util.Date;
 
-public class PriceRecord {
+public class PriceRecord implements Serializable {
     private BigDecimal price;
-    /** can be null if the price is null */
     private Currency currency;
-    private SimpleDateFormat date;
+    private Date date;
 
-    public PriceRecord(BigDecimal price, Currency currency, SimpleDateFormat date) {
+    public PriceRecord(BigDecimal price, Currency currency, Date date) {
         this.price = price;
         this.currency = currency;
-        this.date=date;
+        this.date = date;
     }
 
     public BigDecimal getPrice() {
@@ -33,14 +34,17 @@ public class PriceRecord {
         this.currency = currency;
     }
 
-    public String getStringDate(){
-        return date.format(new Date());
+    public String getStringDate() {
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT);
+        String formattedDate = dateFormat.format(this.date);
+        return formattedDate;
     }
-    public SimpleDateFormat getDate() {
+
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(SimpleDateFormat date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

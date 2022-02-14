@@ -2,7 +2,11 @@ package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.product.Product;
 
-public class CartItem {
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
+    private static final String VIRGULE=",";
+
     private Product product;
     private int quantity;
 
@@ -21,8 +25,9 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return product.getCode() +"," +quantity;
+        return product.getCode() + VIRGULE + quantity;
     }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -36,5 +41,13 @@ public class CartItem {
 
         return product.equals(c.product)
                 && Integer.compare(quantity, c.quantity) == 0;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

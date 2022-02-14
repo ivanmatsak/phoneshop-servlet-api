@@ -1,26 +1,22 @@
 package com.es.phoneshop.model.product;
 
-import com.es.phoneshop.model.cart.CartItem;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.Date;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
     private BigDecimal price;
-    /** can be null if the price is null */
     private Currency currency;
     private int stock;
     private String imageUrl;
-    private Long queryCoincidence=1L;
-    private List<PriceRecord> priceHistory=new ArrayList<>();
+    private Long queryCoincidence = 1L;
+    private List<PriceRecord> priceHistory = new ArrayList<>();
+
     public Product() {
     }
 
@@ -33,6 +29,7 @@ public class Product {
         this.stock = stock;
         this.imageUrl = imageUrl;
     }
+
     public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl) {
         this.code = code;
         this.description = description;
@@ -42,22 +39,25 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Long getQueryCoincidence(String[] queries){
-        for (String query: queries){
-            if(description.contains(query)){
+    public Long getQueryCoincidence(String[] queries) {
+        for (String query : queries) {
+            if (description.contains(query)) {
                 queryCoincidence++;
             }
         }
         return queryCoincidence;
     }
-    public void setPriceHistory(List<PriceRecord> priceRecords){
-        for(PriceRecord record:priceRecords){
+
+    public void setPriceHistory(List<PriceRecord> priceRecords) {
+        for (PriceRecord record : priceRecords) {
             this.priceHistory.add(record);
         }
     }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -117,6 +117,7 @@ public class Product {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -127,12 +128,12 @@ public class Product {
         }
 
         Product c = (Product) o;
-        return Long.compare(id,c.id) == 0
+        return Long.compare(id, c.id) == 0
                 && code.equals(c.code)
                 && description.equals(c.description)
                 && price.equals(c.price)
                 && currency.equals(c.currency)
-                && Integer.compare(stock,c.stock)==0
+                && Integer.compare(stock, c.stock) == 0
                 && imageUrl.equals(c.imageUrl);
     }
 }

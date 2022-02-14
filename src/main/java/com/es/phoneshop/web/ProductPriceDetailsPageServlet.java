@@ -14,11 +14,12 @@ import java.io.IOException;
 public class ProductPriceDetailsPageServlet extends HttpServlet {
 
     private ProductDao productDao;
+
     @Override
-    public void init(ServletConfig config) throws ServletException{
+    public void init(ServletConfig config) throws ServletException {
         super.init(config);
         try {
-            productDao=ArrayListProductDao.getInstance();
+            productDao = ArrayListProductDao.getInstance();
         } catch (ProductNotFoundException e) {
             e.printStackTrace();
         }
@@ -27,8 +28,8 @@ public class ProductPriceDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String productId=request.getPathInfo();
-        request.setAttribute("product",productDao.getProduct(Long.valueOf(productId.substring(1))));
+        String productId = request.getPathInfo();
+        request.setAttribute("product", productDao.getProduct(Long.valueOf(productId.substring(1))));
         request.getRequestDispatcher("/WEB-INF/pages/priceDetails.jsp").forward(request, response);
     }
 }

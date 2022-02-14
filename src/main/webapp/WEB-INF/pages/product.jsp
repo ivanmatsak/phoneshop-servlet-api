@@ -48,9 +48,9 @@
           </tr>
           <tr>
           <td>Quantity</td>
-              <td>
-                <input name="quantity" value="${not empty error? param.quantity: 1}" class= "quantity">
-              </td>
+          <td>
+            <input name="quantity" value="${not empty error? param.quantity: 1}" class= "quantity">
+          </td>
           </tr>
       </table>
       <button>Add to cart</button>
