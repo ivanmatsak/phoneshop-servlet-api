@@ -1,6 +1,5 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
@@ -37,8 +36,15 @@ public class AddToCartServlet extends HttpServlet {
         Map<Long, String> errors = new HashMap<>();
         Long productId = Long.valueOf(request.getPathInfo().substring(1));
         String[] quantities = request.getParameterValues("quantity");
+        String[] productIds =request.getParameterValues("productId");
+        int index = 0;
+        for(int i=0;i<productIds.length;i++){
+            if(productId==Long.valueOf(productIds[i])){
+                index=i;
+            }
+        }
         try {
-            cartService.update(cartService.getCart(request.getSession()),productId, Integer.valueOf(quantities[Math.toIntExact(productId)]));
+            cartService.update(cartService.getCart(request.getSession()),productId, Integer.valueOf(quantities[index]));
         } catch (OutOfStockException | NegativeQuantityException e) {
             handleError(errors, productId, e, request);
         }

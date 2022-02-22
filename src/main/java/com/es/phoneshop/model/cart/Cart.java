@@ -5,6 +5,7 @@ import com.es.phoneshop.model.product.Product;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,9 +15,19 @@ public class Cart implements Serializable {
 
     private int totalQuantity;
     private BigDecimal totalCost;
+    private Currency currency;
 
     public Cart() {
+        this.currency = Currency.getInstance("USD");
         this.items = new ArrayList<>();
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public List<CartItem> getItems() {
@@ -53,9 +64,14 @@ public class Cart implements Serializable {
     }
 
     public Optional<CartItem> getCartItem(Product product, int quantity) {
+        CartItem item = new CartItem(product, quantity);
         return items.stream()
-                .filter(o -> o.equals(new CartItem(product, quantity)))
+                .filter(o -> o.equals(item))
                 .findFirst();
+    }
+
+    public void setItems(List<CartItem> items) {
+        this.items = items;
     }
 
     @Override

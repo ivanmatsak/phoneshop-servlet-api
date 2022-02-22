@@ -5,7 +5,6 @@ import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
 import com.es.phoneshop.model.exceptions.OutOfStockException;
-import com.es.phoneshop.model.exceptions.ProductNotFoundException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;

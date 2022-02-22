@@ -6,7 +6,6 @@ import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -17,7 +16,7 @@ public class DefaultCartService implements CartService {
 
     private ProductDao productDao;
 
-    private DefaultCartService() {
+    public DefaultCartService() {
         productDao = ArrayListProductDao.getInstance();
     }
 
@@ -74,6 +73,13 @@ public class DefaultCartService implements CartService {
         recalculateCart(cart);
     }
 
+    @Override
+    public void clearCart(Cart cart) {
+        cart.setTotalQuantity(0);
+        cart.setTotalCost(new BigDecimal(0));
+        cart.getItems().clear();
+    }
+
     public void checkForStock(Cart cart, Product product, int quantity) throws OutOfStockException, NegativeQuantityException {
         Optional<CartItem> item = cart.getCartItemByName(product);
         if (item.isPresent()) {
@@ -88,9 +94,9 @@ public class DefaultCartService implements CartService {
     private void recalculateCart(Cart cart) {
         cart.setTotalQuantity(cart.getItems().stream()
                 .map(CartItem::getQuantity)
-                .collect(Collectors.summingInt(q->q.intValue())));
+                .collect(Collectors.summingInt(q -> q.intValue())));
         cart.setTotalCost(cart.getItems().stream()
-                .map(cartItem ->cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 }

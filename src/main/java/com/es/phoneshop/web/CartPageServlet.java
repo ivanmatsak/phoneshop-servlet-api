@@ -1,6 +1,5 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
@@ -8,7 +7,6 @@ import com.es.phoneshop.model.exceptions.OutOfStockException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
-import com.es.phoneshop.model.product.RecentlyViewedProducts;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -48,20 +46,26 @@ public class CartPageServlet extends HttpServlet {
         Map<Long, String> errors = new HashMap<>();
         String[] productIds = request.getParameterValues("productId");
         String[] quantities = request.getParameterValues("quantity");
+        String message="Cart updated successfully";
 
-        for (int i = 0; i < productIds.length; i++) {
-            Long productId = Long.valueOf(productIds[i]);
+        if(productIds!=null){
+            for (int i = 0; i < productIds.length; i++) {
+                Long productId = Long.valueOf(productIds[i]);
 
-            int quantity;
-            try {
-                quantity = getQuantity(request, quantities[i]);
-                cartService.update(cartService.getCart(request.getSession()), productId, quantity);
-            } catch (ParseException | OutOfStockException | NegativeQuantityException e) {
-                handleError(errors, productId, e, request);
+                int quantity;
+                try {
+                    quantity = getQuantity(request, quantities[i]);
+                    cartService.update(cartService.getCart(request.getSession()), productId, quantity);
+                } catch (ParseException | OutOfStockException | NegativeQuantityException e) {
+                    handleError(errors, productId, e, request);
+                }
             }
         }
         if(errors.isEmpty()){
-            response.sendRedirect(request.getContextPath() + "/cart?message=Cart updated successfully");
+            if(productIds==null){
+                message = "There is nothing to update";
+            }
+            response.sendRedirect(request.getContextPath() + "/cart?message="+message);
         }else{
             request.setAttribute("errors", errors);
             doGet(request, response);

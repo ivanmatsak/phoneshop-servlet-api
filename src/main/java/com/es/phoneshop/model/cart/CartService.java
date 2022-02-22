@@ -3,7 +3,6 @@ package com.es.phoneshop.model.cart;
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
 import com.es.phoneshop.model.exceptions.OutOfStockException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public interface CartService {
@@ -14,4 +13,6 @@ public interface CartService {
     void update(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException;
 
     void delete(Cart cart, Long productId);
+
+    void clearCart(Cart cart);
 }
