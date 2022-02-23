@@ -71,5 +71,6 @@
       </p>
   </form>
   <form id="deleteCartItem" method="post">
+    <button>Checkout</button>
   </form>
 </tags:master>
