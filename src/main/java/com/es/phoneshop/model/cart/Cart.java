@@ -46,6 +46,10 @@ public class Cart implements Serializable {
         return !list.isEmpty();
     }
 
+    public void setItems(List<CartItem> items) {
+        this.items = items;
+    }
+
     public Optional<CartItem> getCartItemByName(Product product) {
         return items.stream()
                 .filter(o -> product.equals(o.getProduct()))

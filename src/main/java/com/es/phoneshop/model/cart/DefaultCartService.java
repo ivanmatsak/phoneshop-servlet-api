@@ -74,6 +74,11 @@ public class DefaultCartService implements CartService {
         recalculateCart(cart);
     }
 
+    @Override
+    public void clearCart(Cart cart) {
+        cart.getItems().clear();
+    }
+
     public void checkForStock(Cart cart, Product product, int quantity) throws OutOfStockException, NegativeQuantityException {
         Optional<CartItem> item = cart.getCartItemByName(product);
         if (item.isPresent()) {

@@ -43,6 +43,10 @@ public class CartItem implements Serializable {
                 && Integer.compare(quantity, c.quantity) == 0;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
     public void setProduct(Product product) {
         this.product = product;
     }
