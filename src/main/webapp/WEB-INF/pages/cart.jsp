@@ -70,7 +70,8 @@
         <button>Update</button>
       </p>
   </form>
-  <form id="deleteCartItem" method="post">
+  <form action="${pageContext.servletContext.contextPath}/checkout">
     <button>Checkout</button>
   </form>
+  <form id="deleteCartItem" method="post"></form>
 </tags:master>
