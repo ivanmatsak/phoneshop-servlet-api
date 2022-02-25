@@ -5,7 +5,7 @@ import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
 import com.es.phoneshop.model.exceptions.OutOfStockException;
-import com.es.phoneshop.model.exceptions.ProductNotFoundException;
+import com.es.phoneshop.model.exceptions.ZeroQuantityException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
@@ -69,7 +69,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
             } else {
                 cartService.add(cart, productId, quantity);
             }
-        } catch (OutOfStockException | NegativeQuantityException e) {
+        } catch (OutOfStockException | NegativeQuantityException | ZeroQuantityException e) {
             request.setAttribute(ERROR, "Out of stock, available " +product.getStock());
             doGet(request, response);
             return;

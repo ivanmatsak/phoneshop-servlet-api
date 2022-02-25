@@ -4,4 +4,6 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="cart" class="com.es.phoneshop.model.cart.Cart" scope="request"/>
-Cart: ${cart.totalQuantity} items
+<a href="${pageContext.servletContext.contextPath}/cart">
+    Cart: ${cart.totalQuantity} items, total price: ${cart.totalCost}
+</a>

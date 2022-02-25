@@ -7,10 +7,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.RequestDispatcher;
+
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 
 import java.io.IOException;
 
@@ -32,6 +35,8 @@ public class MiniCartServletTest {
     private HttpSession session;
 
     @Mock
+    private ServletConfig config;
+    @Mock
     private RequestDispatcher dispatcher;
 
     private MiniCartServlet servlet;
@@ -40,15 +45,17 @@ public class MiniCartServletTest {
     public void setup() {
         servlet = new MiniCartServlet();
 
+
         when(request.getSession()).thenReturn(session);
         when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
     }
 
     @Test
     public void testDoGet() throws ServletException, IOException {
-        servlet.init();
+        servlet.init(config);
         servlet.doGet(request, response);
         verify(request).setAttribute(anyString(), any());
         verify(request.getRequestDispatcher(anyString())).include(request, response);
     }
 }
+

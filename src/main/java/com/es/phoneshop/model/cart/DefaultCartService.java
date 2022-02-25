@@ -2,11 +2,11 @@ package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
 import com.es.phoneshop.model.exceptions.OutOfStockException;
+import com.es.phoneshop.model.exceptions.ZeroQuantityException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class DefaultCartService implements CartService {
 
     private ProductDao productDao;
 
-    private DefaultCartService() {
+    public DefaultCartService() {
         productDao = ArrayListProductDao.getInstance();
     }
 
@@ -40,7 +40,7 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException {
+    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException, ZeroQuantityException {
         Product product = productDao.getProduct(productId);
 
         checkForStock(cart, product, quantity);
@@ -49,7 +49,8 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException {
+    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException
+            , ZeroQuantityException {
 
         Product product = productDao.getProduct(productId);
         Optional<CartItem> cartItemOptional = cart.getItems().stream()
@@ -79,10 +80,13 @@ public class DefaultCartService implements CartService {
         cart.getItems().clear();
     }
 
-    public void checkForStock(Cart cart, Product product, int quantity) throws OutOfStockException, NegativeQuantityException {
+    public void checkForStock(Cart cart, Product product, int quantity) throws OutOfStockException, NegativeQuantityException
+            , ZeroQuantityException {
         Optional<CartItem> item = cart.getCartItemByName(product);
         if (item.isPresent()) {
-            if (quantity < 0) {
+            if(quantity == 0){
+                throw new ZeroQuantityException();
+            }else if (quantity < 0) {
                 throw new NegativeQuantityException();
             } else if (product.getStock() < quantity) {
                 throw new OutOfStockException();
@@ -93,9 +97,9 @@ public class DefaultCartService implements CartService {
     private void recalculateCart(Cart cart) {
         cart.setTotalQuantity(cart.getItems().stream()
                 .map(CartItem::getQuantity)
-                .collect(Collectors.summingInt(q->q.intValue())));
+                .collect(Collectors.summingInt(q -> q.intValue())));
         cart.setTotalCost(cart.getItems().stream()
-                .map(cartItem ->cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+                .map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 }

@@ -1,21 +1,22 @@
 package com.es.phoneshop.web;
 
-
 import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.cart.DefaultCartService;
+import com.es.phoneshop.model.exceptions.NegativeQuantityException;
+import com.es.phoneshop.model.exceptions.OutOfStockException;
+import com.es.phoneshop.model.exceptions.ZeroQuantityException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.servlet.RequestDispatcher;
-
 import javax.servlet.ServletConfig;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,54 +25,41 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import java.util.Locale;
-
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductDetailsPageServletTest {
-
-    private long id = 1;
-
+public class CartPageServletTest {
     @Mock
     private HttpServletRequest request;
-
     @Mock
     private HttpServletResponse response;
-
-    @Mock
-    private ServletConfig config;
-
-
     @Mock
     private RequestDispatcher requestDispatcher;
-
     @Mock
-    private HttpSession httpSession;
+    private ServletConfig config;
+    @Mock
+    private HttpSession session;
 
-    private ProductDetailsPageServlet servlet;
+
+    private CartPageServlet servlet = new CartPageServlet();
+
+    private ProductDao productDao;
+    @InjectMocks
+    private DefaultCartService cartService;
 
     private Cart cart;
 
-    private ProductDao productDao;
-
     @Before
     public void setup() throws ServletException {
-        servlet = new ProductDetailsPageServlet();
         servlet.init();
         productDao = ArrayListProductDao.getInstance();
-        Currency usd = Currency.getInstance("USD");
-        Product product = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 5, "");
+        cartService = DefaultCartService.getInstance();
         cart = new Cart();
-        productDao.save(product);
-        when(request.getPathInfo()).thenReturn("/" + productDao.getProduct(product.getId()).getId());
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
-        when(request.getSession()).thenReturn(httpSession);
-        when(request.getLocale()).thenReturn(new Locale("en", "USA"));
-
-
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(anyString())).thenReturn(cart);
     }
 
     @Test
@@ -82,10 +70,12 @@ public class ProductDetailsPageServletTest {
     }
 
     @Test
-    public void testDoPost() throws IOException, ServletException {
-        servlet.init(config);
-        when(request.getParameter("quantity")).thenReturn("1");
-        when(httpSession.getAttribute(anyString())).thenReturn(cart);
+    public void testDoPost() throws ServletException, IOException, OutOfStockException, ZeroQuantityException, NegativeQuantityException {
+        Currency usd = Currency.getInstance("USD");
+        Product product = new Product("sgs", "Samsung Galaxy S", new BigDecimal(100), usd, 5, "");
+        productDao.save(product);
+        cartService.add(cart, productDao.getProduct(product.getId()).getId(), 1);
+
         servlet.doPost(request, response);
         verify(response).sendRedirect(anyString());
     }

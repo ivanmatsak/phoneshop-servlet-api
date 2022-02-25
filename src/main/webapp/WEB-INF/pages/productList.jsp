@@ -5,9 +5,9 @@
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
-  <p>
-    Welcome to Expert-Soft training!
-  </p>
+  <c:if test="${not empty param.errors}">
+      <span class="error">Error occurred while placing products: ${param.errors}</span>
+  </c:if>
   <form>
     <input name="query" value="${param.query}">
     <button>Search</button>
@@ -41,6 +41,11 @@
             <td>
                 <input name="quantity" value="${not empty error? param.quantity: 1}" class= "quantity">
                 <input type="hidden" name="productId" value="${product.id}"/>
+                <c:if test="${not empty error}">
+                    <div class="error">
+                        ${errors[product.id]}
+                    </div>
+                </c:if>
             </td>
             <td class="price">
                 <a href="${pageContext.servletContext.contextPath}/products/price/${product.id}">

@@ -40,8 +40,6 @@ public class ArrayListOrderDao implements OrderDao {
         }
     }
 
-
-
     @Override
     public void save(Order order) {
         lock.writeLock().lock();
