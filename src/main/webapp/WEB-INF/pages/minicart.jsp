@@ -5,5 +5,5 @@
 
 <jsp:useBean id="cart" class="com.es.phoneshop.model.cart.Cart" scope="request"/>
 <a href="${pageContext.servletContext.contextPath}/cart">
-    Cart: ${cart.totalQuantity} items
+    Cart: ${cart.totalQuantity} items, total price: ${cart.totalCost}
 </a>

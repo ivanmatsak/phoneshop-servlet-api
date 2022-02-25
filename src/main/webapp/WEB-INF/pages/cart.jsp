@@ -5,9 +5,12 @@
 
 <jsp:useBean id="cart" type="com.es.phoneshop.model.cart.Cart" scope="request"/>
 <tags:master pageTitle="Cart">
-  <p>
-    Cart:${cart}, Total quantity: ${cart.totalQuantity}
-  </p>
+  <c:if test="${empty cart.items}">
+    <h1>
+        <strong>There is no items in the cart</strong>
+    </h1>
+  </c:if>
+
   <c:if test="${not empty param.message}">
     <span class="success">${param.message}</span>
   </c:if>
@@ -16,15 +19,17 @@
   </c:if>
   <form method="post" action="${pageContext.servletContext.contextPath}/cart">
       <table>
-        <thead>
-          <tr>
-            <td>Image</td>
-            <td>Description</td>
-            <td class="quantity">Quantity</td>
-            <td class="price">Price</td>
-            <td></td>
-          </tr>
-        </thead>
+        <c:if test="${not empty cart.items}">
+            <thead>
+              <tr>
+                <td>Image</td>
+                <td>Description</td>
+                <td class="quantity">Quantity</td>
+                <td class="price">Price</td>
+                <td></td>
+              </tr>
+            </thead>
+        </c:if>
         <c:forEach var="item" items="${cart.items}" varStatus="status">
           <tr>
             <td>
@@ -57,21 +62,20 @@
             </td>
           </tr>
         </c:forEach>
-        <tr>
-            <td></td>
-            <td></td>
-            <td>Total cost</td>
-            <td>${cart.totalCost}</td>
-        </tr>
 
-
+        <c:if test="${not empty cart.items}">
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Total cost</td>
+                <td>${cart.totalCost}</td>
+            </tr>
+        </c:if>
       </table>
       <p>
         <button>Update</button>
       </p>
   </form>
-  <form action="${pageContext.servletContext.contextPath}/checkout">
-    <button>Checkout</button>
-  </form>
+
   <form id="deleteCartItem" method="post"></form>
 </tags:master>

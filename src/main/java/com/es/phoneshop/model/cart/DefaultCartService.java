@@ -2,6 +2,7 @@ package com.es.phoneshop.model.cart;
 
 import com.es.phoneshop.model.exceptions.NegativeQuantityException;
 import com.es.phoneshop.model.exceptions.OutOfStockException;
+import com.es.phoneshop.model.exceptions.ZeroQuantityException;
 import com.es.phoneshop.model.product.ArrayListProductDao;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
@@ -39,7 +40,7 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException {
+    public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException, ZeroQuantityException {
         Product product = productDao.getProduct(productId);
 
         checkForStock(cart, product, quantity);
@@ -48,7 +49,8 @@ public class DefaultCartService implements CartService {
     }
 
     @Override
-    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException {
+    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException, NegativeQuantityException
+            , ZeroQuantityException {
 
         Product product = productDao.getProduct(productId);
         Optional<CartItem> cartItemOptional = cart.getItems().stream()
@@ -80,10 +82,13 @@ public class DefaultCartService implements CartService {
         cart.getItems().clear();
     }
 
-    public void checkForStock(Cart cart, Product product, int quantity) throws OutOfStockException, NegativeQuantityException {
+    public void checkForStock(Cart cart, Product product, int quantity) throws OutOfStockException, NegativeQuantityException
+            , ZeroQuantityException {
         Optional<CartItem> item = cart.getCartItemByName(product);
         if (item.isPresent()) {
-            if (quantity < 0) {
+            if(quantity == 0){
+                throw new ZeroQuantityException();
+            }else if (quantity < 0) {
                 throw new NegativeQuantityException();
             } else if (product.getStock() < quantity) {
                 throw new OutOfStockException();
