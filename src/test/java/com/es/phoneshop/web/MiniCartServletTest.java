@@ -11,36 +11,46 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProductListPageServletTest {
+public class MiniCartServletTest {
+
     @Mock
     private HttpServletRequest request;
+
     @Mock
     private HttpServletResponse response;
+
     @Mock
-    private RequestDispatcher requestDispatcher;
+    private HttpSession session;
+
     @Mock
     private ServletConfig config;
 
-    private ProductListPageServlet servlet = new ProductListPageServlet();
+    @Mock
+    private RequestDispatcher dispatcher;
+
+    private MiniCartServlet servlet;
 
     @Before
-    public void setup() throws ServletException {
-        servlet.init(config);
-        when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
+    public void setup() {
+        servlet = new MiniCartServlet();
+        when(request.getSession()).thenReturn(session);
+        when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
     }
 
     @Test
     public void testDoGet() throws ServletException, IOException {
+        servlet.init(config);
         servlet.doGet(request, response);
-
-        verify(requestDispatcher).forward(request, response);
-        verify(request).setAttribute(eq("products"), any());
+        verify(request).setAttribute(anyString(), any());
+        verify(request.getRequestDispatcher(anyString())).include(request, response);
     }
 }

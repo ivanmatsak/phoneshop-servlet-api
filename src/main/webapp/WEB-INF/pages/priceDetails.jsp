@@ -17,13 +17,13 @@
         <td>Price</td>
       </tr>
       </thead>
-          <c:forEach var="dates" items="${product.getPriceHistory()}">
+          <c:forEach var="priceRecord" items="${product.getPriceHistory()}">
             <tr>
               <td>
-                ${dates.date}
+                ${priceRecord.getStringDate()}
               </td>
               <td>
-                <fmt:formatNumber value="${date.price}" type="currency" currencySymbol="${date.currency.symbol}"/>
+                <fmt:formatNumber value="${priceRecord.getPrice()}" type="currency" currencySymbol="${priceRecord.getCurrency().symbol}"/>
               </td>
             </tr>
           </c:forEach>
