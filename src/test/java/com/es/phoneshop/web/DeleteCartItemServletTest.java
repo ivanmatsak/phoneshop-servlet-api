@@ -50,6 +50,7 @@ public class DeleteCartItemServletTest {
         servlet = new DeleteCartItemServlet();
         servlet.init(config);
         when(request.getSession()).thenReturn(session);
+        when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
         when(request.getPathInfo()).thenReturn("/2");
         when(product.getId()).thenReturn((long) 2);
         cart = new Cart();

@@ -24,6 +24,14 @@ public class Cart implements Serializable {
         this.items = new ArrayList<>();
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
     public List<CartItem> getItems() {
         return items;
     }
@@ -68,12 +76,8 @@ public class Cart implements Serializable {
                 .findFirst();
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public void setItems(List<CartItem> items) {
+        this.items = items;
     }
 
     @Override
