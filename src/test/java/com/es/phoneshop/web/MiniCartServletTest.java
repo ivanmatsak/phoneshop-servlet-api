@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -33,7 +32,7 @@ public class MiniCartServletTest {
 
     @Mock
     private ServletConfig config;
-
+  
     @Mock
     private RequestDispatcher dispatcher;
 

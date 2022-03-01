@@ -34,6 +34,7 @@ public class ProductDetailsPageServletTest {
 
     @Mock
     private HttpServletResponse response;
+
     @Mock
     private ServletConfig config;
 
@@ -62,7 +63,6 @@ public class ProductDetailsPageServletTest {
         when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(httpSession);
         when(request.getLocale()).thenReturn(new Locale("en", "USA"));
-
     }
 
     @Test

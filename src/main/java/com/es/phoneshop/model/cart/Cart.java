@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Cart implements Serializable {
+    private static final String CURRENCY = "USD";
+
     private List<CartItem> items;
 
     private int totalQuantity;
@@ -18,7 +20,7 @@ public class Cart implements Serializable {
     private Currency currency;
 
     public Cart() {
-        this.currency = Currency.getInstance("USD");
+        this.currency = Currency.getInstance(CURRENCY);
         this.items = new ArrayList<>();
     }
 
@@ -55,6 +57,10 @@ public class Cart implements Serializable {
                 .filter(o -> product.equals(o.getProduct()))
                 .collect(Collectors.toList());
         return !list.isEmpty();
+    }
+
+    public void setItems(List<CartItem> items) {
+        this.items = items;
     }
 
     public Optional<CartItem> getCartItemByName(Product product) {
