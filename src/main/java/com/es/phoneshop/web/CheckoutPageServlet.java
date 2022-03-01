@@ -71,7 +71,6 @@ public class CheckoutPageServlet extends HttpServlet {
             cartService.clearCart(cartService.getCart(request.getSession()));
             response.sendRedirect(request.getContextPath() + "/order/overview/" + order.getSecureId());
         } else {
-
             request.setAttribute("errors", errorAttributes);
             request.setAttribute("paymentMethods", orderService.getPaymentMethods());
             request.setAttribute("order", order);
