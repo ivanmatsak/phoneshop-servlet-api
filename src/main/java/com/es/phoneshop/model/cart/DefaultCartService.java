@@ -77,6 +77,8 @@ public class DefaultCartService implements CartService {
 
     @Override
     public void clearCart(Cart cart) {
+        cart.setTotalQuantity(0);
+        cart.setTotalCost(new BigDecimal(0));
         cart.getItems().clear();
     }
 

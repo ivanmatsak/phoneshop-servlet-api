@@ -5,16 +5,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import javax.servlet.RequestDispatcher;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-
 import java.io.IOException;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +32,7 @@ public class MiniCartServletTest {
 
     @Mock
     private ServletConfig config;
+  
     @Mock
     private RequestDispatcher dispatcher;
 
@@ -44,8 +41,6 @@ public class MiniCartServletTest {
     @Before
     public void setup() {
         servlet = new MiniCartServlet();
-
-
         when(request.getSession()).thenReturn(session);
         when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
     }
@@ -58,4 +53,3 @@ public class MiniCartServletTest {
         verify(request.getRequestDispatcher(anyString())).include(request, response);
     }
 }
-
