@@ -9,7 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class DefaultDosProtectionService implements DosProtectionService{
-    private static final long THRESHOLD = 20;
+    private static final long THRESHOLD = 40;
     private static final int RESET_TIME = 1000 * 60;
     private Map<String, IpInfo> info;
 
