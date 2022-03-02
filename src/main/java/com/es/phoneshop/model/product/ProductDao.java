@@ -12,4 +12,6 @@ public interface ProductDao {
     void save(Product product) throws ProductNotFoundException;
 
     void delete(Long id) throws ProductNotFoundException;
+
+    List<Product> searchProducts(String productCode, String maxPrice, String minPrice, String minStock);
 }
