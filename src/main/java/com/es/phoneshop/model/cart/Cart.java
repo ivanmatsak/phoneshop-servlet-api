@@ -76,10 +76,6 @@ public class Cart implements Serializable {
                 .findFirst();
     }
 
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-    }
-
     @Override
     public String toString() {
         return "items=[" + items + ']';
