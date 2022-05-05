@@ -52,7 +52,7 @@
 
   <servlet>
     <servlet-name>deleteCartItem</servlet-name>
-    <servlet-class>com.es.phoneshop.web.DeleteCartItemServlet</servlet-class>
+    <servlet-class>com.es.phoneshop.web.command.ActionServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>deleteCartItem</servlet-name>
@@ -61,7 +61,8 @@
 
   <servlet>
     <servlet-name>addToCart</servlet-name>
-    <servlet-class>com.es.phoneshop.web.AddToCartServlet</servlet-class>
+    <servlet-class>com.es.phoneshop.web.command.ActionServlet</servlet-class>
+    <action>AddToCart</action>
   </servlet>
   <servlet-mapping>
     <servlet-name>addToCart</servlet-name>
