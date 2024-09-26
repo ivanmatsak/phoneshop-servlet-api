@@ -2,6 +2,7 @@ package com.es.phoneshop.model.product;
 
 import com.es.phoneshop.model.exceptions.ProductNotFoundException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -106,5 +107,21 @@ public class ArrayListProductDao implements ProductDao {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public List<Product> searchProducts(String productCode, String maxPrice, String minPrice, String minStock) {
+        BigDecimal maxPriceDecimal = BigDecimal.valueOf(Integer.valueOf(maxPrice));
+        BigDecimal minPriceDecimal = BigDecimal.valueOf(Integer.valueOf(minPrice));
+        Integer minStockInteger = Integer.valueOf(minStock);
+
+        return products.stream()
+                .filter(product -> product.getCode().equals(productCode))
+                .filter(product -> product.getPrice().compareTo(maxPriceDecimal) == -1
+                        ||  product.getPrice().compareTo(maxPriceDecimal) == 0
+                        && product.getPrice().compareTo(minPriceDecimal) == 1
+                        || product.getPrice().compareTo(minPriceDecimal) == 0)
+                .filter(product -> product.getStock() >= minStockInteger)
+                .collect(Collectors.toList());
     }
 }

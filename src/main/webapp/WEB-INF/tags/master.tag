@@ -16,6 +16,9 @@
     <a href="${pageContext.servletContext.contextPath}/cart">
         <jsp:include page="/cart/minicart"/>
     </a>
+    <a href="${pageContext.servletContext.contextPath}/advancedSearchPage">
+        Advanced search
+    </a>
   </header>
   <main>
     <jsp:doBody/>
